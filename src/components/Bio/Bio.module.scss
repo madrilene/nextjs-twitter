@@ -1,0 +1,33 @@
+.bio {
+  display: flex;
+  align-items: center;
+}
+
+.bioImage {
+  img {
+    border-radius: 50%;
+    width: 13rem;
+    height: auto;
+    margin-right: 3rem;
+    border: 2px solid hsl(0deg, 0%, 73%);
+  }
+}
+
+.bioContent {
+}
+
+.bioContentName {
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 3rem;
+  color: hsl(221deg, 19%, 29%);
+  margin: 1rem 0;
+}
+
+.bioContentTagline,
+.bioContentRole {
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  color: hsl(220deg, 30%, 14%);
+  margin: 0;
+}

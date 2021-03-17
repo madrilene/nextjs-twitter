@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap");
+
+$primary-color: hsl(0, 52%, 52%);
+$gray: hsl(0, 0%, 40%);
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: hsl(220deg, 30%, 14%);
+  background-color: hsl(40deg, 100%, 97%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
