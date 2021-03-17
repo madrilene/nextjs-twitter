@@ -1,12 +1,33 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 
+import { useAuth } from "../hooks/useAuth";
+import { getAllPosts, createPost } from "../lib/posts";
+
+import Bio from "../components/Bio";
 import Post from "../components/Post";
 import PostForm from "../components/PostForm";
-import Bio from "../components/Bio";
 
 import styles from "../styles/Home.module.scss";
 
-export default function Home() {
+export default function Home({ posts: defaultPosts }) {
+  const [posts, updatePosts] = useState(defaultPosts);
+
+  const postsSorted = posts.sort(function (a, b) {
+    return new Date(b.date) - new Date(a.date);
+  });
+
+  const { user, logIn, logOut } = useAuth();
+
+  async function handleOnSubmit(data, e) {
+    e.preventDefault();
+
+    await createPost(data);
+
+    const posts = await getAllPosts();
+    updatePosts(posts);
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,40 +35,54 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Meine Posts!</h1>
+      {!user && (
+        <p>
+          <button onClick={logIn}>Log In</button>
+        </p>
+      )}
 
+      {user && (
+        <p>
+          <button onClick={logOut}>Log Out</button>
+        </p>
+      )}
+
+      <main className={styles.main}>
         <Bio
           headshot="https://pbs.twimg.com/profile_images/1303644762067664901/iHKD1qSG_400x400.jpg"
           name="Lene Saile"
           tagline="Desarrolladora web en Madrid"
           role="Más sobre mi en www.lenesaile.com"
         />
-
         <ul className={styles.posts}>
-          <li>
-            <Post content="Hex ich bin ein neuer Post" date="17.03.2021" />
-          </li>
-
-          <li>
-            <Post content="Wir sind andere Posts" date="15.03.2021" />
-          </li>
-
-          <li>
-            <Post content="Wir sind andere Posts" date="15.03.2021" />
-          </li>
-
-          <li>
-            <Post
-              content="Ich arbeite an Figma und mache eine neue Webseite die all meine
-              Tweets zeigt und noch ein paar Wörter damit s genug sind"
-              date="14.03.2021"
-            />
-          </li>
+          {postsSorted.map((post) => {
+            const { content, id, date } = post;
+            return (
+              <li key={id}>
+                <Post
+                  content={content}
+                  date={new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  }).format(new Date(date))}
+                />
+              </li>
+            );
+          })}
         </ul>
 
-        <PostForm />
+        {user && <PostForm onSubmit={handleOnSubmit} />}
       </main>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const posts = await getAllPosts();
+
+  return {
+    props: {
+      posts,
+    },
+  };
 }
