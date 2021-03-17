@@ -37,13 +37,17 @@ export default function Home({ posts: defaultPosts }) {
 
       {!user && (
         <p>
-          <button onClick={logIn}>Log In</button>
+          <button className={styles.loginButton} onClick={logIn}>
+            Log In
+          </button>
         </p>
       )}
 
       {user && (
         <p>
-          <button onClick={logOut}>Log Out</button>
+          <button className={styles.loginButton} onClick={logOut}>
+            Log Out
+          </button>
         </p>
       )}
 
@@ -78,11 +82,11 @@ export default function Home({ posts: defaultPosts }) {
 }
 
 export async function getStaticProps() {
-  const posts = await getAllPosts();
+  // const posts = await getAllPosts();
 
   return {
     props: {
-      posts,
+      posts: [],
     },
   };
 }
